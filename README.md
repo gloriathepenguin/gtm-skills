@@ -44,7 +44,9 @@ Covers: paid ads (Google/Meta/LinkedIn), channel selection strategy, PLG→Enter
 - **Holly Chen** (ExponentialX, ex-Slack/Miro/Loom) — channel selection by ARR stage; PLG/SLG convergence at $20M+; B2B influencer marketing · [LinkedIn](https://www.linkedin.com/in/holly) · [X](https://x.com/hollychen) · [Source](https://www.branch.io/resources/podcast/growth-advisor-and-former-global-head-of-digital-marketing-slack-holly-chen/)
 - **Phil Carter** (Elemental Growth, ex-Quizlet) — 3-layer growth framework (Creation/Delivery/Capture); first-session imperative (80% day-zero trials); value-to-noise ratio; viral artifacts; AEO · [LinkedIn](https://www.linkedin.com/in/phil-carter-growth/) · [X](https://x.com/philcarterr) · [Source](https://www.youtube.com/watch?v=UYIgu02h8cs)
 
-## Reference Structure
+## Knowledge Base Structure
+
+![growth-expert 知识库四层结构与使用路径](growth-expert-structure.png)
 
 The knowledge base is organized into four layers:
 
