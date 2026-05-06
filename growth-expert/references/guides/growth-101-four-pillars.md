@@ -27,6 +27,106 @@
 
 ---
 
+## 第零章补充：App 产品的流量体系（与 Web 完全不同）
+
+> 上面的框架默认面向 Web/SaaS 产品。如果你的产品是 iOS/Android App，流量逻辑完全不同，需要单独理解。
+
+### App 的流量来源
+
+```
+App 流量
+├── 付费获量（UA，User Acquisition）
+│   ├── Apple Search Ads（ASA）← 只在 App Store 搜索结果页
+│   ├── Google UAC（Universal App Campaign）← 打包投放，不能单选 Play Store
+│   └── 社媒广告（FB/TikTok/Pangle 等）← 跳转到应用商店下载
+└── 自然获量
+    ├── ASO（App Store Optimization）← App 内的 SEO，靠关键词排名
+    └── 口碑/品牌词搜索
+```
+
+---
+
+### Apple Search Ads（ASA）vs Google UAC：两种完全不同的逻辑
+
+#### Apple Search Ads（苹果搜索广告）
+
+用户在 **App Store 搜索框**输入关键词时，顶部出现的广告位。逻辑和 Google SEM 几乎一样：
+
+- **你指定关键词竞价**：选好词、出价、控制预算
+- **高购买意图**：用户正在主动找 App，转化率高
+- **数据相对透明**：能看到每个词的展示量、点击率、安装成本
+
+#### Google UAC（通用应用广告系列）
+
+Google Ads 里的 App 广告类型，投放位置由 Google 自动决定：
+
+- **你不能指定关键词**：只提供素材（文字/图片/视频）+ 预算，Google 自动匹配用户
+- **投放位置打包**：Play Store 搜索 + Google 搜索 + YouTube + GDN 展示网络，**无法单独只买 Play Store 搜索位**
+- **黑盒程度高**：不知道哪个位置带来了哪个用户
+
+**关键差异**：iOS 买量可以精确到"我要买搜索'fitness tracker'这个词的用户"；Android 买量只能说"我要买'下载健康 App 意向高'的用户，具体在哪里展示你定"。
+
+**UAC 三阶段运营逻辑（量 → 质 → 钱）**：
+
+| 阶段 | 目标 | 出价方式 | 适用时机 |
+|------|------|---------|---------|
+| **UAC 1.0** | 最大化安装量 | Target CPI | 冷启动，快速积累用户规模 |
+| **UAC 2.0** | 优化应用内行为（注册/购买等） | Target CPA | 有一定安装数据后（50+ 转化/月）|
+| **UAC 3.0** | 最大化收益，吸引高 LTV 用户 | Target ROAS | 产品成熟，有稳定付费数据 |
+
+有足够的上阶段数据才能升级——跳过直接上 ROAS，算法没有信号可学，跑不动。
+
+→ UAC 详细操作见 [channels/google-ads.md](../channels/google-ads.md)
+
+---
+
+### 为什么 AppTweak 的 Search Ads Intelligence 值钱
+
+App Store Search Ads 是个**黑盒竞价市场**——苹果不公开谁在投哪些词、用什么素材、投了多久。
+
+AppTweak 通过抓取数据，让你在黑盒里获得竞品情报：
+
+| 能看到什么 | 实际用途 |
+|-----------|---------|
+| 竞品在投哪些关键词 | 快速找到你漏掉的高价值词，不用从零摸索 |
+| 竞品的广告素材截图 | 直接看对方用什么标题/截图组合，跳过 A/B 测试摸索期 |
+| 竞品的投放时间线 | 判断某个词是否有人在持续烧钱（值不值得入场竞价） |
+| 同一关键词下的竞争格局 | 评估 CPT（每次点击费用）区间，判断预算够不够打 |
+
+**对代运营的实际价值**：客户来了不知道该买哪些词、用什么素材，以前要跑 2-4 周才有数据。有 AppTweak 可以直接对标竞品已验证过的打法，冷启动速度快很多。
+
+**什么时候 AppTweak 的溢价不值**：客户没有在跑 App Store Search Ads，也没有计划跑。这种情况下 Search Ads Intelligence 功能完全用不上，同类工具里 Appfigures（$9/月）或 ASOMobile（$47/月）性价比更高。
+
+---
+
+### App 买量的归因问题：为什么需要 MMP
+
+App 产品面临一个特殊问题：广告在 Google/Meta/TikTok 投放，安装发生在 App Store/Play Store，行为数据在 App 内——三段跨平台，各广告平台只能自报数据，结果出现"数字打架"：Google 报 1000 次安装 + Meta 报 800 次安装，加起来远超实际安装量，因为同一用户被两个平台同时认领。
+
+**MMP（Mobile Measurement Partner，移动归因平台）**的作用就是统一裁判：每次安装到底算哪个渠道的。
+
+主流选择：**AppsFlyer**（最主流）、Adjust、Branch。
+
+运营规则：
+- 预算决策以 MMP 数据为准（SSOT），不看平台自报数字
+- UAC 2.0/3.0 的应用内事件（购买、注册）必须通过 MMP 正确回传给 Google，算法才能优化
+
+→ MMP 和归因详细说明见 [topics/tracking-attribution.md](../topics/tracking-attribution.md)
+
+### ASO vs SEO：相似但不同
+
+| 维度 | SEO（网站） | ASO（App Store） |
+|------|------------|----------------|
+| 平台 | Google/Bing | App Store / Google Play |
+| 排名因素 | 外链、内容质量、页面结构 | 关键词密度、下载量、评分/评论、更新频率 |
+| 工具 | Ahrefs、SEMrush | AppTweak、ASOMobile、Appfigures |
+| 验证路径 | 先用 SEM 跑词，再做 SEO | 先用 ASA 验证词，再优化 ASO |
+| 见效时间 | 3-6 个月 | 2-4 周（竞争没那么激烈） |
+
+**对代运营的启示**：如果客户同时有 Web 端和 App 端，SEO 和 ASO 要分开策略，工具也要分开——没有一个工具能同时做好两件事。
+
+---
+
 ## 第一章：为什么顺序很重要
 
 大多数团队同时开启所有渠道，结果四个都没跑通。
@@ -380,6 +480,26 @@ AI 让功能做得很快，团队容易陷入"发得越多价值越大"的误区
 
 4. **四个渠道各找一家外包，数据互不相通**  
    → 广告代投不知道 SEO 在做什么词，SEO 不看广告转化数据
+
+---
+
+## 核心指标速查
+
+| 指标 | 全称 | 含义 | 计算公式 | 典型场景 |
+|------|------|------|---------|---------|
+| **CPI** | Cost Per Install | 每次 App 安装成本 | 广告花费 ÷ 安装次数 | UAC 1.0，App 冷启动 |
+| **CPA** | Cost Per Acquisition | 每次转化成本 | 广告花费 ÷ 转化次数 | UAC 2.0，优化应用内行为 |
+| **ROAS** | Return on Ad Spend | 广告花费回报率 | 广告带来的收入 ÷ 广告花费 | UAC 3.0，优化收益 |
+| **CAC** | Customer Acquisition Cost | 获客成本 | 总获客花费 ÷ 新客数量 | 比 CPA 范围更广，含所有获客渠道 |
+| **LTV** | Lifetime Value | 用户生命周期价值 | 用户在整个生命周期内带来的总收入 | 判断 CAC 是否合理的参照 |
+| **CTR** | Click-Through Rate | 点击率 | 点击次数 ÷ 展示次数 | 衡量广告素材吸引力 |
+| **CPM** | Cost Per Mille | 千次展示成本 | 广告花费 ÷ 曝光量 × 1000 | 反映流量价格；高低不直接代表流量质量 |
+| **oCPM** | Optimized Cost Per Mille | 优化千次展示出价 | 广告主填写期望转化成本 | Meta / 字节系主流出价方式，系统以转化为优化目标 |
+| **eCPM** | Effective Cost Per Mille | 有效千次展示收益 | 出价 × 预估CTR × 预估CVR × 1000 | 平台内部排序依据；eCPM 高 → 拿到更多流量分配 |
+
+> **三者关系**：广告主按 **oCPM** 出价 → 系统按 **eCPM** 排序 → 最终成本表现为 **CPM**。这也解释了为什么素材质量比出价本身更重要：同样出价，素材 CTR/CVR 更高的账户 eCPM 更高，自然拿到更多流量。详见 [meta-ads.md](../channels/meta-ads.md)。
+
+**核心判断标准**：LTV > CAC × 3，业务才可持续。ROAS 4x 意味着花 1 块钱赚回 4 块钱。
 
 ---
 
